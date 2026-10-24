@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f26b1d">
+  <title>Balance Center · Turnos</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="192x192" href="img/icon-192.png">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Balance">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="/"><img class="brand-logo" src="img/logo-balance.png" alt="Balance Center" width="600" height="186"></a>
+    <div class="userbox" id="userbox"></div>
+  </header>
+
+  <main>
+    <section id="auth" hidden>
+      <h1>Reservá tu turno</h1>
+      <div class="card">
+        <div class="tabs" role="tablist">
+          <button type="button" role="tab" id="tab-login" aria-selected="true">Ingresar</button>
+          <button type="button" role="tab" id="tab-register" aria-selected="false">Crear cuenta</button>
+        </div>
+
+        <form id="login-form">
+          <label for="login-user">Tu usuario</label>
+          <input id="login-user" name="username" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" required>
+          <label for="login-pass">Tu clave</label>
+          <input id="login-pass" name="password" type="password" autocomplete="current-password" required>
+          <button class="full" type="submit">Ingresar</button>
+        </form>
+
+        <form id="register-form" hidden>
+          <label for="reg-name">Nombre y apellido</label>
+          <input id="reg-name" name="name" autocomplete="name" autocapitalize="words" data-name required>
+          <label for="reg-user">Elegí un usuario</label>
+          <input id="reg-user" name="username" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false"
+            required minlength="3" maxlength="30" pattern="[A-Za-z0-9._\-]+" placeholder="Ej: maria.gomez"
+            title="Solo letras, números, punto o guion, sin espacios">
+          <p class="hint field-hint">Sin espacios. Lo vas a usar para ingresar.</p>
+          <label for="reg-phone">Celular (con código de área)</label>
+          <input id="reg-phone" name="phone" inputmode="tel" autocomplete="tel" required placeholder="Ej: 1155551234">
+          <label for="reg-pass">Elegí una clave (mínimo 4 caracteres)</label>
+          <input id="reg-pass" name="password" type="password" autocomplete="new-password" required minlength="4">
+          <button class="full" type="submit">Crear mi cuenta</button>
+        </form>
+      </div>
+      <p class="hint">¿Olvidaste tu clave? Pedile al profe que te la cambie.</p>
+    </section>
+
+    <section id="app" hidden>
+      <h1 id="hello"></h1>
+      <div id="notifications"></div>
+
+      <div class="card">
+        <h2>Mis próximos turnos</h2>
+        <ul class="my-list" id="my"></ul>
+      </div>
+
+      <div class="card">
+        <h2>Reservar un turno</h2>
+        <p class="hint">1. Elegí el día. &nbsp;2. Tocá <b>Reservar</b> en el horario que quieras.<br>Cada horario muestra qué clase es y cuántos lugares quedan.</p>
+        <div class="days" id="days"></div>
+        <div class="day-title" id="day-title"></div>
+        <div id="plan-info"></div>
+        <div id="day-banner"></div>
+        <ul class="slots" id="slots"></ul>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="common.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+# Configuración para desplegar en Render (plan gratuito).
+# Los datos viven en Turso: el disco de Render gratis se borra en cada reinicio.
+services:
+  - type: web
+    name: turnero-balance-center
+    runtime: node
+    plan: free
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /api/me
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: TURSO_DATABASE_URL
+        sync: false
+      - key: TURSO_AUTH_TOKEN
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false

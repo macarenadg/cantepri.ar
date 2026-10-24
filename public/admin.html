@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f26b1d">
+  <title>Balance Center · Panel admin</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="192x192" href="img/icon-192.png">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Balance">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="/admin.html"><img class="brand-logo" src="img/logo-balance.png" alt="Balance Center" width="600" height="186"><span class="brand-tag">Admin</span></a>
+    <div class="userbox">
+      <button class="link" type="button" id="logout">Salir</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="tabs" role="tablist">
+      <button type="button" role="tab" data-tab="turnos" aria-selected="true">Turnos</button>
+      <button type="button" role="tab" data-tab="usuarios" aria-selected="false">Usuarios</button>
+      <button type="button" role="tab" data-tab="grilla" aria-selected="false">Grilla</button>
+      <button type="button" role="tab" data-tab="fijos" aria-selected="false">Fijos</button>
+      <button type="button" role="tab" data-tab="avisos" aria-selected="false">Avisos</button>
+      <button type="button" role="tab" data-tab="estadisticas" aria-selected="false">Estadísticas</button>
+    </div>
+
+    <section id="turnos">
+      <div class="card">
+        <div class="admin-nav">
+          <button type="button" class="secondary" id="prev" aria-label="Día anterior">◀</button>
+          <input type="date" id="date">
+          <button type="button" class="secondary" id="next" aria-label="Día siguiente">▶</button>
+          <button type="button" class="secondary" id="today">Hoy</button>
+        </div>
+        <div class="day-title" id="day-title"></div>
+        <div id="day-actions" class="row"></div>
+      </div>
+      <div class="slots" id="slots"></div>
+    </section>
+
+    <section id="usuarios" hidden>
+      <div class="card">
+        <h2>Agregar usuario</h2>
+        <p class="hint">Para alumnos que no pueden crear la cuenta solos, o para dar de alta profesores. Después ingresan con este usuario y esta clave.</p>
+        <form id="new-user">
+          <label for="nu-name">Nombre y apellido</label>
+          <input id="nu-name" name="name" autocapitalize="words" data-name required>
+          <label for="nu-user">Usuario</label>
+          <input id="nu-user" name="username" autocapitalize="none" autocorrect="off" spellcheck="false" required minlength="3" maxlength="30"
+            pattern="[A-Za-z0-9._\-]+" placeholder="Ej: maria.gomez" title="Solo letras, números, punto o guion, sin espacios">
+          <label for="nu-phone">Celular</label>
+          <input id="nu-phone" name="phone" inputmode="tel" required>
+          <label for="nu-pass">Clave</label>
+          <input id="nu-pass" name="password" required minlength="4">
+          <label>Roles <span class="muted">(podés marcar más de uno)</span></label>
+          <div class="checks" id="nu-roles">
+            <label class="check"><input type="checkbox" name="roles" value="alumno" checked> Alumno</label>
+            <label class="check"><input type="checkbox" name="roles" value="profesor"> Profesor</label>
+            <label class="check"><input type="checkbox" name="roles" value="admin"> Administrador</label>
+          </div>
+          <div id="nu-plan-wrap">
+            <label for="nu-plan">Plan</label>
+            <select id="nu-plan" name="plan"></select>
+            <label for="nu-until">Pago hasta <span class="muted">(opcional)</span></label>
+            <input id="nu-until" name="planUntil" type="date">
+          </div>
+          <button class="full" type="submit">Agregar usuario</button>
+        </form>
+      </div>
+      <div class="card">
+        <h2>Usuarios <span class="muted" id="user-count"></span></h2>
+        <p><a class="btn out" href="/api/admin/export/users">⬇ Descargar usuarios (Excel)</a></p>
+        <div class="row">
+          <input type="search" id="user-search" placeholder="Buscar por nombre, usuario, celular o N°">
+          <select id="user-filter">
+            <option value="">Todos</option>
+            <option value="alumno">Alumnos</option>
+            <option value="sin-plan">Alumnos sin plan</option>
+            <option value="vencidos">Plan vencido o por vencer</option>
+            <option value="profesor">Profesores</option>
+            <option value="admin">Administradores</option>
+          </select>
+        </div>
+        <ul class="users" id="users" style="margin-top:12px"></ul>
+      </div>
+    </section>
+
+    <section id="grilla" hidden>
+      <div class="card">
+        <h2>Profesores de cada clase</h2>
+        <p class="hint">Elegí qué profesor da cada horario. Cada profe ve en su inicio las clases que tiene asignadas y puede anotar alumnos en ellas. Se guarda al elegir.</p>
+        <div id="grid"></div>
+      </div>
+    </section>
+
+    <section id="fijos" hidden>
+      <div class="card">
+        <h2>Turnos fijos</h2>
+        <p class="hint">Alumnos que van siempre el mismo día y hora al Personalizado. Los profes también pueden crearlos en sus horarios.</p>
+        <div id="fixed"></div>
+      </div>
+    </section>
+
+    <section id="avisos" hidden>
+      <div class="card">
+        <h2>Nuevo aviso</h2>
+        <p class="hint">Lo ven todos (alumnos, profes y admins) arriba de la pantalla al ingresar. Ej.: "El lunes 24 es feriado: no hay clases".</p>
+        <form id="new-ann">
+          <label for="ann-msg">Mensaje</label>
+          <input id="ann-msg" name="message" required maxlength="300">
+          <label for="ann-until">Mostrar hasta <span class="muted">(opcional; si lo dejás vacío, hasta que lo borres)</span></label>
+          <input id="ann-until" name="until" type="date">
+          <button class="full" type="submit">Publicar aviso</button>
+        </form>
+      </div>
+      <div class="card">
+        <h2>Avisos publicados</h2>
+        <ul class="users" id="ann-list"></ul>
+      </div>
+    </section>
+
+    <section id="estadisticas" hidden>
+      <div class="card">
+        <h2>Estadísticas</h2>
+        <form class="range" id="stats-form">
+          <div><label for="st-from">Desde</label><input id="st-from" name="from" type="date" required></div>
+          <div><label for="st-to">Hasta</label><input id="st-to" name="to" type="date" required></div>
+          <button type="submit">Ver</button>
+        </form>
+        <p class="row">
+          <a class="btn out" id="export-bookings" href="#">⬇ Descargar turnos del período (Excel)</a>
+        </p>
+        <div id="stats"></div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="common.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

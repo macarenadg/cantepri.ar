@@ -1,0 +1,14 @@
+{
+  "name": "Balance Center · Turnos",
+  "short_name": "Balance",
+  "description": "Reservá tus clases en Balance Center",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#f26b1d",
+  "lang": "es-AR",
+  "icons": [
+    { "src": "img/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "img/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
